@@ -230,10 +230,10 @@ exports.stringifyObject = function (op, sep, cl, indent) {
   var anyData = false
   var stream = through(function (data) {
     var str; 
-    if (typeof(data) === 'object' && data.start){
+    if (typeof(data) === 'object' && data._jsonstreamstart){
         str = op + JSON.stringify(data.key) + ':'; 
     }
-    else if (typeof(data) === 'object' && data.end){
+    else if (typeof(data) === 'object' && data._jsonstreamend){
         str = cl;
     }
     else{
