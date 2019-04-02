@@ -229,10 +229,24 @@ exports.stringifyObject = function (op, sep, cl, indent) {
   var first = true
   var anyData = false
   var stream = through(function (data) {
-    anyData = true
-    var json = JSON.stringify(data[0]) + ':' + JSON.stringify(data[1], null, indent)
-    if(first) { first = false ; this.queue(op + json)}
-    else this.queue(sep + json)
+    var str; 
+    if (typeof(data) === 'object' && data.start){
+        str = op + JSON.stringify(data.key) + ':'; 
+    }
+    else if (typeof(data) === 'object' && data.end){
+        str = cl;
+    }
+    else{
+        anyData = true
+        str = JSON.stringify(data[0]) + ':' + JSON.stringify(data[1], null, indent);
+        if (first){
+            first = false;
+            str = op + str;
+        }
+        else str = sep + str;
+    }
+
+    this.queue(str);
   },
   function (data) {
     if(!anyData) this.queue(op)
